@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#5a7a8a">
+<title>Turf Fuel Adjuvant Advisor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand-slate:#5a7a8a;
+  --brand-slate-dark:#3f5d6c;
+  --brand-slate-light:#d8e2e7;
+  --brand-green:#5e9a3d;
+  --brand-green-dark:#4a7d30;
+  --brand-purple:#7e3f8f;
+  --brand-pink:#d04b8f;
+  --brand-orange:#e07334;
+  --ink:#1d2733;
+  --ink-soft:#475569;
+  --ink-muted:#8094a3;
+  --line:#e5e9ec;
+  --line-soft:#eef1f3;
+  --bg:#fbfcfc;
+  --card:#ffffff;
+  --warn-bg:#fff4e6;
+  --warn-border:#e07334;
+  --ok-bg:#eef7e8;
+  --info-bg:#eef3f7;
+  --shadow-sm:0 1px 2px rgba(15,30,45,.04);
+  --shadow-md:0 4px 14px rgba(15,30,45,.07);
+  --shadow-lg:0 20px 40px -16px rgba(15,30,45,.18);
+}
+html,body{height:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px;
+  line-height:1.45;
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overscroll-behavior-y:none;
+}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+input{border:none;outline:none;background:none}
+.app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  min-height:100dvh;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
+}
+/* HEADER */
+.header{
+  background:var(--brand-slate);
+  color:#fff;
+  padding:14px 18px 16px;
+  padding-top:calc(14px + env(safe-area-inset-top, 0px));
+  position:sticky;
+  top:0;
+  z-index:50;
+  box-shadow:0 1px 0 rgba(0,0,0,.05);
+}
+.header-row{display:flex;align-items:center;gap:10px}
+.brand-logo{
+  height:38px;
+  width:auto;
+  max-width:80%;
+  display:block;
+}
+.brand-tagline{
+  font-family:'Inter',sans-serif;
+  font-style:italic;
+  font-size:11px;
+  font-weight:400;
+  opacity:.85;
+  margin-top:6px;
+  letter-spacing:.01em;
+}
+.header-sub{
+  font-size:11px;
+  opacity:.82;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  margin-top:10px;
+  font-weight:500;
+}
+.header-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:-.005em;
+  margin-top:2px;
+  line-height:1.05;
+}
+.header-title span{color:#a8d68d}
+/* MAIN */
+.main{
+  flex:1;
+  padding:16px 16px 100px;
+}
+/* SECTIONS */
+.section{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 14px 16px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow-sm);
+}
+.section-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--ink-muted);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+}
+.section-label::before{
+  content:'';
+  width:14px;height:2px;
+  background:var(--brand-green);
+}
+/* SEARCH */
+.search-wrap{position:relative}
+.search-input{
+  width:100%;
+  padding:13px 14px 13px 40px;
+  font-size:16px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  transition:border-color .15s, box-shadow .15s;
+  font-weight:500;
+}
+.search-input:focus{
+  border-color:var(--brand-slate);
+  box-shadow:0 0 0 3px rgba(90,122,138,.12);
+}
+.search-icon{
+  position:absolute;
+  left:13px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--ink-muted);
+  pointer-events:none;
+}
+.search-clear{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  width:30px;height:30px;
+  display:none;
+  align-items:center;justify-content:center;
+  color:var(--ink-muted);
+  border-radius:6px;
+}
+.search-clear.visible{display:flex}
+.search-clear:active{background:var(--line-soft)}
+.search-hint{
+  font-size:12px;
+  color:var(--ink-muted);
+  margin-top:8px;
+  padding-left:2px;
+}
+/* RESULTS LIST */
+.results{
+  margin-top:10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  max-height:340px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.result-item{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 13px;
+  border-bottom:1px solid var(--line-soft);
+  transition:background .12s;
+  width:100%;
+  text-align:left;
+}
+.result-item:last-child{border-bottom:none}
+.result-item:active{background:var(--line-soft)}
+.result-info{flex:1;min-width:0}
+.result-name{
+  font-weight:600;
+  font-size:14.5px;
+  color:var(--ink);
+  margin-bottom:2px;
+  word-break:break-word;
+}
+.result-name em{
+  background:#fff4cc;
+  font-style:normal;
+  padding:0 1px;
+  border-radius:2px;
+}
+.result-ai{
+  font-size:12px;
+  color:var(--ink-soft);
+  word-break:break-word;
+}
+.result-ai em{
+  background:#fff4cc;
+  font-style:normal;
+  padding:0 1px;
+  border-radius:2px;
+}
+.result-type{
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:3px 7px;
+  border-radius:4px;
+  flex-shrink:0;
+  white-space:nowrap;
+}
+.type-Fungicide{background:#e8eef8;color:#2b4a7a}
+.type-Herbicide{background:#e8f3e0;color:#3f6e1e}
+.type-Insecticide{background:#fbe8d8;color:#9c4a1a}
+.type-PGR{background:#efe2f0;color:#5e2d6e}
+.type-Algaecide{background:#dcf0ee;color:#1f5e58}
+.type-Miticide{background:#f5e0e0;color:#7a2727}
+.type-Nematicide{background:#e8eaf3;color:#363a6b}
+.no-results{
+  padding:18px;
+  text-align:center;
+  color:var(--ink-muted);
+  font-size:13.5px;
+}
+/* PH + VOLUME */
+.fields-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.field-input-wrap{position:relative}
+.field-input{
+  width:100%;
+  padding:12px 38px 12px 12px;
+  font-size:16px;
+  border:1.5px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+  font-weight:600;
+  transition:border-color .15s, box-shadow .15s;
+}
+.field-input:focus{
+  border-color:var(--brand-slate);
+  box-shadow:0 0 0 3px rgba(90,122,138,.12);
+}
+.field-input::-webkit-outer-spin-button,
+.field-input::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0;
+}
+.field-input{-moz-appearance:textfield}
+.field-unit{
+  position:absolute;
+  right:11px;top:50%;
+  transform:translateY(-50%);
+  font-size:12px;
+  color:var(--ink-muted);
+  font-weight:600;
+  pointer-events:none;
+}
+.field-label-tiny{
+  font-size:11px;
+  color:var(--ink-muted);
+  font-weight:600;
+  margin-bottom:4px;
+  letter-spacing:.04em;
+}
+/* RECOMMENDATION CARD */
+.recommendation{
+  margin-top:6px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+  animation:slideIn .35s cubic-bezier(.2,.7,.2,1);
+}
+@keyframes slideIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.product-header{
+  padding:14px 16px 12px;
+  background:linear-gradient(180deg,#f6f9fa,#fff);
+  border-bottom:1px solid var(--line-soft);
+}
+.product-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.1;
+  letter-spacing:-.005em;
+  color:var(--ink);
+  margin-bottom:4px;
+  word-break:break-word;
+}
+.product-ai{
+  font-size:13px;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+  word-break:break-word;
+}
+.product-ai-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--ink-muted);
+  display:block;
+  margin-bottom:1px;
+}
+.product-ai-value{
+  font-weight:600;
+  color:var(--ink);
+  font-size:13.5px;
+}
+.product-type-tag{
+  display:inline-block;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:3px 8px;
+  border-radius:4px;
+}
+
+.adjuvant-card{
+  padding:16px;
+  background:linear-gradient(180deg,#f3f7ee 0%, #fff 100%);
+  border-top:3px solid var(--brand-green);
+}
+.adjuvant-card-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+}
+.adjuvant-card-eyebrow{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--brand-green-dark);
+}
+.adjuvant-name{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:34px;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.01em;
+  color:var(--ink);
+  margin-bottom:6px;
+}
+.adjuvant-name .turf-fuel-prefix{
+  display:block;
+  font-size:11px;
+  letter-spacing:.16em;
+  font-weight:700;
+  color:var(--brand-green);
+  margin-bottom:3px;
+}
+.adjuvant-rate-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:6px;
+  margin-top:8px;
+  padding-top:10px;
+  border-top:1px dashed #cfd9c1;
+}
+.adjuvant-rate-label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--ink-muted);
+}
+.adjuvant-rate{
+  font-weight:700;
+  font-size:15px;
+  color:var(--ink);
+}
+.adjuvant-reason{
+  margin-top:12px;
+  padding:11px 12px;
+  background:#fff;
+  border:1px solid #d9e6c8;
+  border-radius:8px;
+  font-size:13px;
+  line-height:1.5;
+  color:var(--ink-soft);
+  position:relative;
+}
+.adjuvant-reason::before{
+  content:'WHY';
+  position:absolute;
+  top:-7px;left:10px;
+  background:var(--brand-green);
+  color:#fff;
+  font-size:9px;
+  letter-spacing:.12em;
+  font-weight:700;
+  padding:2px 6px;
+  border-radius:3px;
+}
+/* Calculated volume callout */
+.volume-callout{
+  margin-top:12px;
+  padding:14px 14px 12px;
+  background:#fff;
+  border:1.5px solid var(--brand-slate);
+  border-radius:10px;
+}
+.volume-callout-label{
+  font-size:10px;
+  letter-spacing:.14em;
+  font-weight:700;
+  text-transform:uppercase;
+  color:var(--brand-slate);
+  margin-bottom:5px;
+}
+.volume-callout-value{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:22px;
+  color:var(--ink);
+  line-height:1.1;
+  letter-spacing:-.005em;
+}
+.volume-callout-value .lo{color:var(--ink-soft);font-weight:600;font-size:.85em}
+.volume-callout-sub{
+  font-size:12px;
+  color:var(--ink-soft);
+  margin-top:5px;
+}
+/* PH WARNING */
+.ph-warning{
+  margin:0;
+  padding:14px 16px;
+  background:var(--warn-bg);
+  border-top:1px solid #f5d9b8;
+  border-bottom:1px solid #f5d9b8;
+  display:flex;
+  gap:11px;
+  align-items:flex-start;
+}
+.ph-warning-icon{
+  flex-shrink:0;
+  width:28px;height:28px;
+  background:var(--warn-border);
+  color:#fff;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;
+  font-size:16px;
+  font-family:'Barlow Condensed',sans-serif;
+}
+.ph-warning-text{flex:1;font-size:13px;line-height:1.5}
+.ph-warning-title{
+  font-weight:700;
+  color:#9c4a1a;
+  margin-bottom:2px;
+}
+.ph-warning-detail{color:var(--ink-soft)}
+.ph-warning-detail strong{color:var(--ink)}
+
+/* ALTERNATIVES */
+.alternatives{
+  padding:14px 16px 16px;
+  border-top:1px solid var(--line-soft);
+}
+.alternatives-header{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--ink-muted);
+  margin-bottom:9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.alt-count{
+  background:var(--line-soft);
+  color:var(--ink-soft);
+  font-size:10px;
+  font-weight:700;
+  padding:2px 7px;
+  border-radius:10px;
+  letter-spacing:.04em;
+}
+.alt-list{display:flex;flex-direction:column;gap:6px}
+.alt-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  padding:10px 11px;
+  background:#fafbfb;
+  border:1px solid var(--line);
+  border-radius:8px;
+  width:100%;
+  text-align:left;
+  transition:background .12s, border-color .12s;
+}
+.alt-item:active{background:#f3f5f6;border-color:#d4dae0}
+.alt-item-name{
+  font-weight:600;
+  font-size:13.5px;
+  color:var(--ink);
+  flex:1;
+  min-width:0;
+  word-break:break-word;
+}
+.alt-item-arrow{color:var(--ink-muted);flex-shrink:0}
+.no-alts{
+  font-size:13px;
+  color:var(--ink-muted);
+  font-style:italic;
+  padding:6px 2px;
+}
+
+/* EMPTY STATE */
+.empty-state{
+  text-align:center;
+  padding:32px 16px;
+  color:var(--ink-muted);
+}
+.empty-state-icon{
+  margin:0 auto 16px;
+  width:64px;height:64px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#eef3f7,#f6f9fa);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--brand-slate);
+}
+.empty-state-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:19px;
+  color:var(--ink);
+  margin-bottom:5px;
+  letter-spacing:.005em;
+}
+.empty-state-text{font-size:13.5px;line-height:1.5;max-width:280px;margin:0 auto}
+
+/* FOOTER */
+.footer{
+  padding:18px 16px 22px;
+  padding-bottom:calc(18px + env(safe-area-inset-bottom, 0px));
+  font-size:11px;
+  color:var(--ink-muted);
+  text-align:center;
+  line-height:1.5;
+}
+.footer-link{color:var(--brand-slate);font-weight:600;text-decoration:none}
+
+/* SUGGEST CHIPS */
+.suggest-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
+}
+.chip{
+  font-size:11.5px;
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:14px;
+  background:var(--line-soft);
+  color:var(--ink-soft);
+  border:1px solid var(--line);
+  transition:all .12s;
+}
+.chip:active{background:var(--brand-slate-light);border-color:var(--brand-slate);color:var(--brand-slate-dark)}
+
+/* MEDIA QUERIES — larger screens get a touch more breathing room */
+@media (min-width:520px){
+  .header{padding:18px 22px 18px}
+  .header-title{font-size:30px}
+  .main{padding:18px 18px 100px}
+  .section{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-row">
+      <img src="data:image/png;base64,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" class="brand-logo" alt="Target Specialty Products">
+    </div>
+    <div class="brand-tagline">Empowering You to Grow Your Business™</div>
+    <div class="header-sub">Turf Fuel Adjuvant Advisor</div>
+    <h1 class="header-title">Pair every spray.<br><span>Sell every adjuvant.</span></h1>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- SEARCH SECTION -->
+    <section class="section">
+      <div class="section-label">Step 1 — Find a chemical</div>
+      <div class="search-wrap">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" id="search" class="search-input" placeholder="Trade name or active ingredient…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <button class="search-clear" id="clearBtn" aria-label="Clear">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="search-hint" id="searchHint">Search by trade name (e.g. <strong>Roundup</strong>) or active (e.g. <strong>Glyphosate</strong>).</div>
+      <div class="suggest-chips" id="suggestChips" style="display:none;"></div>
+      <div class="results" id="results" style="display:none;"></div>
+    </section>
+
+    <!-- TANK INPUTS SECTION -->
+    <section class="section">
+      <div class="section-label">Step 2 — Tank details (optional)</div>
+      <div class="fields-grid">
+        <div>
+          <div class="field-label-tiny">SPRAY TANK pH</div>
+          <div class="field-input-wrap">
+            <input type="number" id="phInput" class="field-input" inputmode="decimal" placeholder="—" step="0.1" min="0" max="14">
+            <span class="field-unit">pH</span>
+          </div>
+        </div>
+        <div>
+          <div class="field-label-tiny">SPRAYER VOLUME</div>
+          <div class="field-input-wrap">
+            <input type="number" id="volInput" class="field-input" inputmode="decimal" placeholder="—" step="1" min="0">
+            <span class="field-unit">gal</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUTPUT AREA -->
+    <div id="output">
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6l-4 6c-1 2 0 4 2 4h10c2 0 3-2 2-4l-4-6V3"/><path d="M9 3h6"/><path d="M10 13h4"/></svg>
+        </div>
+        <div class="empty-state-title">Ready to spray smart</div>
+        <div class="empty-state-text">Search for a chemical above and we'll match the right Turf Fuel adjuvant for the tank.</div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Recommendations based on the <strong>Turf Fuel Pesticide Adjuvant Guide</strong>.<br>
+      Always read product label — label directions supersede this guide.<br>
+      <span style="opacity:.6">Liquid products only · <span id="prodCount">…</span> chemicals indexed</span>
+    </div>
+  </main>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const PRODUCTS = [{"tn":"26/36","ai":"thiophanate methyl + iprodione","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["26GT","26019"],"src":"guide"},{"tn":"4-Speed XT","ai":"24D+Triclopyr+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["4-Speed XT"],"src":"guide"},{"tn":"AXXE Broad Spectrum","ai":"Ammonium Nonanoate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Abacide 2 HP Abamectn 1.9%","ai":"Abamectin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Avid"],"src":"guide"},{"tn":"Abamectin 0.15EC","ai":"Abamectin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Avid"],"src":"guide"},{"tn":"Acclaim Extra","ai":"Fenoxfaprop-p-ethyl","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Acclaim Extra"],"src":"guide"},{"tn":"Acelepryn","ai":"Chlorantraniliprole","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Acelepryn"],"src":"guide"},{"tn":"Adept","ai":"Diflubenzuron","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Adorn","ai":"fluopicolide","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Alligare 2 4d LV6","ai":"24D","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Alligare Amine 2-4D","ai":"24D","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Alligare Argos Algaecide and","ai":"copper","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Alligare Dicamba + 2,4D DMA","ai":"24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Alligare Diuron 4L","ai":"Diuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Direx 4L"],"src":"guide"},{"tn":"Alligare Flumigard SC","ai":"Flumioxin","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Alligare Fluridone","ai":"Fluridone","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Alligare Imazapyr 4SL","ai":"imazapyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Alligare MSM 60DF","ai":"Metsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"Alligare Triclopyr 3 SL","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Alligare Triclopyr 4","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Alligare Triclopyr 4 EC","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Aloft GC SC","ai":"Clothianidin+Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Aloft"],"src":"guide"},{"tn":"Aloft LC SC","ai":"Clothianidin+Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Aloft"],"src":"guide"},{"tn":"Altercel Plant Growth Regulator Solution","ai":"Chlormequat","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Altus","ai":"Flutyradifurone","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Ambition","ai":"Sulfentrazone","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Dismiss"],"src":"guide"},{"tn":"Appear II","ai":"Potassium Phosphite","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Appear"],"src":"guide"},{"tn":"Aquabac XT","ai":"Bacillus Thurgiensis","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Aquasweep","ai":"Triclopry+24D","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Aquathol K","ai":"Dipotassium endothall","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Arborjet Tree-Age G4","ai":"Emamectin benzoate","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Arena 50WDG","ai":"Clothianidin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Arena"],"src":"guide"},{"tn":"Ascernity","ai":"Benzovindiflupr+Difenoconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Astro","ai":"Permethrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Astro"],"src":"guide"},{"tn":"Asulox","ai":"Asulam","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Attain TR Micro","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Avelyo","ai":"Mefentrifluconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Avenger Weed Killer Concentrate","ai":"d-limonene","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Avenue South","ai":"Penoxsulam+Sulfentrazone+24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Avid 0.15 EC","ai":"Abamectin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Avid"],"src":"guide"},{"tn":"Avid 0.15EC","ai":"Abamectin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Avid"],"src":"guide"},{"tn":"AzProp Select","ai":"Azoxy + Prop","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Azoxy 2SC","ai":"Azoxystrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Heritage"],"src":"guide"},{"tn":"Azoxy Bio","ai":"Azoxystrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Heritage"],"src":"guide"},{"tn":"Azteb","ai":"azoxystrobin +tebuconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Heritage"],"src":"guide"},{"tn":"Badge SC","ai":"Copper","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Banner MAXX II","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"Banner MAXX II LinkPak","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"Banol","ai":"propamocarb","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banol"],"src":"guide"},{"tn":"Barricade 4FL","ai":"Prodiamine","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Barricade"],"src":"guide"},{"tn":"Barricade 4FL LinkPak","ai":"Prodiamine","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Barricade"],"src":"guide"},{"tn":"Basagran T&O","ai":"Bentazon","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Basagran"],"src":"guide"},{"tn":"Baseline","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Beloukha Garden","ai":"Pelargonic acid","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Scythe"],"src":"guide"},{"tn":"Bensumec 4 LF","ai":"Bensulide","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Botanigard ES","ai":"Beauveria Bassiana","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Botanigard Maxx","ai":"Beauveria Bassiana","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Briskway","ai":"azoxy + difenoconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Briskway"],"src":"guide"},{"tn":"Broadform","ai":"Fluopyram+Trifloxstrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Brushmaster","ai":"24D Ester+24D acid+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Camelot O","ai":"Copper","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Capstone","ai":"Aminopyralid+triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Captain Liquid Copper","ai":"Copper","type":"Algaecide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Captain XTR","ai":"Copper","type":"Algaecide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Captain XTR Liquid Copper","ai":"Copper","type":"Algaecide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Captiva Prime","ai":"Capsicum+garlic+soy bean oil","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Cease","ai":"bacillus subtilis","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Celsius Xtra","ai":"Thiencarbazone-methyl","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Celsius"],"src":"guide"},{"tn":"Certainty Turf Herb","ai":"Sulfosulfuron","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Certainty"],"src":"guide"},{"tn":"Change Up","ai":"MCPA+Dicamba+fluroxypry","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Cheetah Pro","ai":"Glufosinate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Finale"],"src":"guide"},{"tn":"Chipco 26019 FLO","ai":"iprodione","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["26GT","26019"],"src":"guide"},{"tn":"Chipco 26GT Flo","ai":"iprodione","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["26GT","26019"],"src":"guide"},{"tn":"Civitas One Premix","ai":"oil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Civitas Ready2Mix","ai":"oil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Civitas Ready2Mix IBC","ai":"oil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Clash","ai":"Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Cleantraxx","ai":"penoxsulam+oxyfluorfen","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Goal"],"src":"guide"},{"tn":"Clearcast","ai":"imazamox","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Clearys 3336 F","ai":"thiophanate methyl","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["3336","QP-TM","T-methyl SPC"],"src":"guide"},{"tn":"Companion MAXX 2-0-1","ai":"Disease","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Concert II","ai":"prop + chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Concert","Concert II"],"src":"guide"},{"tn":"Confront","ai":"Clopyralid+Triclopyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Confront"],"src":"guide"},{"tn":"Conserve SC T&O","ai":"Spinosad","type":"Insecticide","adj":"Halo 90","rate":"1-4 pt per 100 gal","gt":["Conserve"],"src":"guide"},{"tn":"Cool Power","ai":"MCPA+Dicamba+Triclopyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Cool Power"],"src":"guide"},{"tn":"Copper","ai":"Copper","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Crossroad","ai":"Broadleaf","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Cutless MEC","ai":"Flurprimidol","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Cutrine Plus","ai":"Copper","type":"Algaecide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Cutrine Ultra","ai":"Copper","type":"Algaecide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Daconil Action","ai":"Chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Daconil Action","Weatherstik","Ensign"],"src":"guide"},{"tn":"Daconil Weatherstik T&O","ai":"Chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Daconil Action","Weatherstik","Ensign"],"src":"guide"},{"tn":"Daconil Zn","ai":"Chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Defendor","ai":"Florasulam","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Defendor"],"src":"guide"},{"tn":"Densicor","ai":"Prothioconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Dimension 2EW","ai":"Dithlopyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Dimension"],"src":"guide"},{"tn":"Diquat SPC 2L","ai":"Diquat","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Reward","Tribune"],"src":"guide"},{"tn":"Discus L","ai":"Cyfluthin+imidacloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Merit","Malice","Mallet","QP Imidacloprid"],"src":"guide"},{"tn":"Dismiss","ai":"Sulfentrazone","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Dismiss"],"src":"guide"},{"tn":"Dismiss CA Turf","ai":"Sulfentrazone","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Dismiss"],"src":"guide"},{"tn":"Dismiss NXT","ai":"Sulfentrazone+Carfentrazone","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Dismiss"],"src":"guide"},{"tn":"Dismiss South","ai":"Sulfentrazone+Carfentrazone","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Dismiss"],"src":"guide"},{"tn":"Dismiss Turf","ai":"Sulfentrazone","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Dismiss"],"src":"guide"},{"tn":"Diuron 4L WEST","ai":"Diuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Direx 4L"],"src":"guide"},{"tn":"Divanem","ai":"Abamectin","type":"Nematicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Avid"],"src":"guide"},{"tn":"Dominion Tree and Shrub","ai":"imidacloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Merit","Malice","Mallet","QP Imidacloprid"],"src":"guide"},{"tn":"Dorado","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"Drexel Atra-5","ai":"Atrazine","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Atrazine 4L"],"src":"guide"},{"tn":"Drexel Atrazine 4L","ai":"Atrazine","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Atrazine 4L"],"src":"guide"},{"tn":"Drexel Auguzine","ai":"Grass Weeds","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Drexel Carbaryl 4L","ai":"Carbaryl","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Sevin"],"src":"guide"},{"tn":"Drexel Diuron 4L","ai":"Diuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Direx 4L"],"src":"guide"},{"tn":"Drive XLR8","ai":"Quinclorac","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Drive XLR8"],"src":"guide"},{"tn":"Dylox  420 SL","ai":"Trichlorfon","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Dylox"],"src":"guide"},{"tn":"E-2","ai":"24D+Fluroxypyr+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Eagle 20EW","ai":"Myclobutanil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Eagle"],"src":"guide"},{"tn":"Echelon 4SC","ai":"Sulfentrazone+Prodiamine","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Echelon"],"src":"guide"},{"tn":"Ecotec Plus Insecticide & Miticide","ai":"oil","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Empress Intrinsic","ai":"Pyraclostrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Insignia"],"src":"guide"},{"tn":"Encartis","ai":"Boscalid+chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Emerald"],"src":"guide"},{"tn":"Envoy Plus","ai":"Clethodim","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Envoy"],"src":"guide"},{"tn":"Eraser Weed & Grass Killer Concentrate","ai":"Glyphosate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Glyphosate"],"src":"guide"},{"tn":"Escalade 2","ai":"24D+Fluroxypyr+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Escort XP","ai":"Metsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"Esplanade Sure","ai":"Indaziflam+Rimsulfuron","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Specticle","Specticle Flo"],"src":"guide"},{"tn":"Exteris Stressgard","ai":"Fluopyram","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Fame +C","ai":"fluoxostrobin + teb + chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Fame SC","ai":"Fluoxastrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Disarm","Disarm C","Disarm M"],"src":"guide"},{"tn":"Fenstop","ai":"Fenamidone","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Ference","ai":"Cyantraniltrole","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Fiata StressGard","ai":"mono and di-potassum salts","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Fiesta -  CA USE ONLY","ai":"Iron Sulphate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Fiesta - NO CA USE","ai":"Iron Sulphate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Finale XL Herbicide T&O","ai":"Glufosinate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Finale"],"src":"guide"},{"tn":"Fireworxx","ai":"Capylic acid+Capric acid","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Floramite SC MCP","ai":"Mites","type":"Insecticide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Floramite"],"src":"guide"},{"tn":"Florel Brand Growth Reg","ai":"Ethephon","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Florel Brand Growth Regulator","ai":"Ethephon","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Fluazinam 40SC Select","ai":"Fluazinam","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Secure"],"src":"guide"},{"tn":"Fosphite Green","ai":"Potassium Phosphite","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Appear"],"src":"guide"},{"tn":"Fusilade II","ai":"Fluazifop-p-butyl","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Fusilade"],"src":"guide"},{"tn":"Gallery SC","ai":"Isoxaben","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Gallery"],"src":"guide"},{"tn":"Gallery SC Herbacide","ai":"Isoxaben","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Gallery"],"src":"guide"},{"tn":"Gargoil Insect Mite Disease Control","ai":"oil","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Garlon 3A Herb","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Garlon 4 Ultra","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Goal 2XL","ai":"Oxyfluorfen","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Goal"],"src":"guide"},{"tn":"GoalTender","ai":"Oxyfluorfen","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Goal"],"src":"guide"},{"tn":"Grapple","ai":"Rimsulfuron","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Tranxit"],"src":"guide"},{"tn":"Grotto Flowable Liquid Copper","ai":"Copper","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Habitat","ai":"Imazapyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Hachi-Hachi SC","ai":"Tolfenpyrad","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Headway","ai":"Azoxy + Prop","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Headway"],"src":"guide"},{"tn":"Headway LinkPak","ai":"Azoxy + Prop","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Headway"],"src":"guide"},{"tn":"Heritage TL","ai":"Azoxystrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Heritage"],"src":"guide"},{"tn":"Heritage TL Fungicide Linkpak","ai":"Azoxystrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Heritage"],"src":"guide"},{"tn":"Hexygon IQ","ai":"mites","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Horsepower","ai":"MCPA+Dicamba+Triclopyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Cool Power"],"src":"guide"},{"tn":"Hydrothol 191","ai":"endothall","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Imicide HP","ai":"Imidacloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Merit","Malice","Mallet","QP Imidacloprid"],"src":"guide"},{"tn":"Imidacloprid 2F T/I","ai":"Imidacloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Merit","Malice","Mallet","QP Imidacloprid"],"src":"guide"},{"tn":"Imidacloprid 75WSP Select","ai":"Imidacloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Merit","Malice","Mallet","QP Imidacloprid"],"src":"guide"},{"tn":"Indemnify","ai":"Nematodes","type":"Nematicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Insignia SC Intrinsic","ai":"Pyraclostrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Insignia"],"src":"guide"},{"tn":"Instrata","ai":"Chlorothalonil + prop + fludioxonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Instrata"],"src":"guide"},{"tn":"Interface StressGard","ai":"iprodione + trifluoxystrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Interface"],"src":"guide"},{"tn":"Intrepid 2F","ai":"Methoxyfenozide","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Kabuto SC","ai":"Isofetamid","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Kalida","ai":"Fluindapyr+Flutriafol","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Katana","ai":"Flazasulfuron","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Kerb SC T&O","ai":"Prodiamine","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Kerb"],"src":"guide"},{"tn":"Komeen","ai":"Copper","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Kontos","ai":"Spirotetramat","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Lexicon","ai":"Fluxapyroxad + pyraclostrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Insignia"],"src":"guide"},{"tn":"Lontrel T&O","ai":"Clopyralid","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Lontrel"],"src":"guide"},{"tn":"MCPP-P 4 AMINE","ai":"MCPP","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"MSMA 6 Plus","ai":"Metsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"Magus Miticide","ai":"Mites","type":"Miticide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Mainspring GNL","ai":"Cyantraniliprole","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Mallet 2F T&O","ai":"Imidacloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Merit","Malice","Mallet","QP Imidacloprid"],"src":"guide"},{"tn":"Manor","ai":"Metsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"Manzate Max T&O","ai":"mancozeb","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Fore","Dithane","Manzate"],"src":"guide"},{"tn":"Marengo","ai":"Indaziflam","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Specticle","Specticle Flo"],"src":"guide"},{"tn":"Martin's A/P Eraser","ai":"Glyphosate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Glyphosate"],"src":"guide"},{"tn":"MatchPoint","ai":"Spinosad","type":"Insecticide","adj":"Halo 90","rate":"1-4 pt per 100 gal","gt":["Conserve"],"src":"guide"},{"tn":"Maxtima","ai":"Mefenprifluconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Medallion SC","ai":"Fludioxonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Medallion"],"src":"guide"},{"tn":"Meridian 25WG","ai":"Thiamethoxam","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Meridian"],"src":"guide"},{"tn":"Merit 75WSP","ai":"Imidacloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Merit","Malice","Mallet","QP Imidacloprid"],"src":"guide"},{"tn":"Meso 4 SC Select","ai":"Mesotrione","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Tenacity"],"src":"guide"},{"tn":"Method 240SL Herb","ai":"aminocyclopyrachlor","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Milestone Specialty","ai":"Trisopropanolaammonium salt","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Millennium Ultra 2","ai":"24D+Clopyralid+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Millenium Ultra 2"],"src":"guide"},{"tn":"Minx 2","ai":"Abamectin","type":"Miticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Avid"],"src":"guide"},{"tn":"Mirage StressGard","ai":"Tebuconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"MycoJect Ultra HP","ai":"Bacteria","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"NativeKlean","ai":"24D+Aminopyralid","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Nautique","ai":"Copper","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Navicon Intrinsic","ai":"mefentrifluconazole + pyraclostrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Insignia"],"src":"guide"},{"tn":"Nufarm Diquat SPC 2L","ai":"Diquat","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Reward","Tribune"],"src":"guide"},{"tn":"Octane 2% SC","ai":"Pyraflufen","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Orkestra Intrinsic","ai":"Fluxapyroxad + pyraclostrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Insignia"],"src":"guide"},{"tn":"Ornamec Over The Top","ai":"Fluazifop-p-butyl","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Fusilade"],"src":"guide"},{"tn":"Outrider","ai":"Grass Weeds","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Overture 35WP","ai":"Pyridalyl","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"PPZ 41.8 Select","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"Panoramic 2SL","ai":"Imazapic","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Pathfinder II","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Pedestal","ai":"Novaluron","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Pedigree SC","ai":"flutolanil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Prostar"],"src":"guide"},{"tn":"Pendulum AquaCap","ai":"Pendimethalin","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Pendulum","AquaCap"],"src":"guide"},{"tn":"Pennant Magnum","ai":"S-Metholachlor","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Phyton 27","ai":"Copper","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Phyton 35","ai":"Copper","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Pillar SC","ai":"pyraclostrobin + tripionconizole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Insignia"],"src":"guide"},{"tn":"Pinpoint","ai":"Mandestrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Pipron LC","ai":"piperalin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Plateau","ai":"Imazapic","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Polaris","ai":"Imazapyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Posterity","ai":"Pydiflumetofen","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Posterity Forte","ai":"Pydiflumetofen","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Posterity XT","ai":"Pydiflumetofen+Azoxystrobin+Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Headway"],"src":"guide"},{"tn":"Power Zone","ai":"Carfentrazone+MCPA+Dicamba","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["QuickSilver"],"src":"guide"},{"tn":"Pramitol 25E 25% Prometon","ai":"Prometon","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Prograss","ai":"Ethofumesate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Prograss"],"src":"guide"},{"tn":"Propiconazole 14.3","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"Prosedge Selective Herbicide 2","ai":"Halosulfuron-Methyl","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Sedgehammer","Prosedge"],"src":"guide"},{"tn":"Proxy","ai":"Ethephon","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"PureSpray 10E Horticultural Oil","ai":"oil","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"PureSpray Green","ai":"oil","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Purespray 10E Horticultural Oil","ai":"oil","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Pylex","ai":"Topramezon","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Pylex"],"src":"guide"},{"tn":"Pylon","ai":"Mites","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Pyrethrum TR","ai":"Permethrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Astro"],"src":"guide"},{"tn":"Q4 Plus","ai":"Quinclorac+Sulfentrazone+24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Q4 Plus"],"src":"guide"},{"tn":"Q4 Plus Turf","ai":"Quinclorac+Sulfentrazone+24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Q4 Plus"],"src":"guide"},{"tn":"Q4 Plus Turf Herb","ai":"Quinclorac+Sulfentrazone+24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Q4 Plus"],"src":"guide"},{"tn":"QP 2-D","ai":"Triclopyr+clopyralid","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"QP Bifenthrin 7.9F","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"QP Chlorothalonil 720 SFT","ai":"Chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Chlorothalonil"],"src":"guide"},{"tn":"QP Enclave","ai":"Teb + ipro + TM + Chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP Eraser","ai":"Glyphosate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Glyphosate"],"src":"guide"},{"tn":"QP Fahrenheit","ai":"Metsulfuron methyl+Dicamba","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"QP Gateway","ai":"cyazofamid","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Segway"],"src":"guide"},{"tn":"QP Glyphosate Plus","ai":"Glyphosate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Glyphosate"],"src":"guide"},{"tn":"QP MSM Turf","ai":"Metsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"QP Mefenoxam 2 AQ","ai":"Mefenoxam","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Subdue Maxx"],"src":"guide"},{"tn":"QP Negate 37WG","ai":"Metsulfuron+rimsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"QP Pac-Low SC","ai":"Paclobutrazol","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP Pramitol 25E","ai":"Prometon","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP Pramitol 25E  HZ","ai":"Prometon","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP Prodiamine 4L","ai":"Prodiamine","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Barricade"],"src":"guide"},{"tn":"QP Propiconazole 14.3","ai":"propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"QP Propiconazole 14.3-","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"QP Strobe 2L Broad Spectrum","ai":"Azoxystrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Heritage"],"src":"guide"},{"tn":"QP Suprado","ai":"Novaluron","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP T-Nex","ai":"T-Nex","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP T-Nex PGR","ai":"T-Nex","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP TM 4.5 Flowable","ai":"Dithlopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["3336","QP-TM","T-methyl SPC"],"src":"guide"},{"tn":"QP Tebuconazole 3.6 Foliar","ai":"Tebuconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"QP Todal","ai":"Nematodes","type":"Nematicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"QuickSilver T&O","ai":"Carfentrazone","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["QuickSilver"],"src":"guide"},{"tn":"Quincept","ai":"24D+Dicamba+Quinclorac","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Ranger Pro","ai":"Glyphosate","type":"Herbicide","adj":"Tank pHix","rate":"4-8 fl oz per 100 gal","gt":["Roundup","Ranger Pro","Razor Pro"],"src":"guide"},{"tn":"Rayora","ai":"Flutriafol","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Recognition","ai":"Trifloxysulfuron-sodium","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Monument"],"src":"guide"},{"tn":"Regalia Biofungicide","ai":"Disease","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Regalia CG","ai":"Reynoutria sachalinensis","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Regulate Select","ai":"metalaxyl","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Reliant","ai":"Potassium Phosphite","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Appear"],"src":"guide"},{"tn":"Renovate 3","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Renown","ai":"Azoxystrobin + chlorothalonil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Renown"],"src":"guide"},{"tn":"Resolute 4FL","ai":"Prodiamine","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Barricade"],"src":"guide"},{"tn":"Retriever Insecticide QC","ai":"Acetamiprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Revolver","ai":"Foramsulfuron","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Revolver"],"src":"guide"},{"tn":"Reward LS & Aquatic","ai":"Diquat","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Reward","Tribune"],"src":"guide"},{"tn":"Reward Landscape and Aquatic","ai":"Diquat","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Reward","Tribune"],"src":"guide"},{"tn":"Rometsol","ai":"Metsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"Ronstar Flo","ai":"Oxadiazone","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Ronstar"],"src":"guide"},{"tn":"Roundup Custom","ai":"Glyphosate","type":"Herbicide","adj":"Tank pHix","rate":"4-8 fl oz per 100 gal","gt":["Roundup","Ranger Pro","Razor Pro"],"src":"guide"},{"tn":"Roundup Pro Conc","ai":"Glyphosate","type":"Herbicide","adj":"Tank pHix","rate":"4-8 fl oz per 100 gal","gt":["Roundup","Ranger Pro","Razor Pro"],"src":"guide"},{"tn":"Roundup ProMax","ai":"Glyphosate","type":"Herbicide","adj":"Tank pHix","rate":"4-8 fl oz per 100 gal","gt":["Roundup","Ranger Pro","Razor Pro"],"src":"guide"},{"tn":"Roundup QuikPro","ai":"Glyphosate+diquat","type":"Herbicide","adj":"Tank pHix","rate":"4-8 fl oz per 100 gal","gt":["Roundup","Ranger Pro","Razor Pro"],"src":"guide"},{"tn":"Roundup QuikPro SC Total","ai":"Glyphosate+indaziflam","type":"Herbicide","adj":"Tank pHix","rate":"4-8 fl oz per 100 gal","gt":["Roundup","Ranger Pro","Razor Pro"],"src":"guide"},{"tn":"Rycar","ai":"Pyrifluquinazon","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Safari 20SG","ai":"Dinotefuran","type":"Insecticide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Safari"],"src":"guide"},{"tn":"Sapphire","ai":"Penoxsulam","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Savate","ai":"Spiromesifen","type":"Insecticide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Forbid"],"src":"guide"},{"tn":"Scimitar GC w/ Ornamental","ai":"lambda-cyhalothrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Scimitar"],"src":"guide"},{"tn":"Scythe","ai":"Pelargonic acid","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Scythe"],"src":"guide"},{"tn":"SeClear","ai":"Copper Hydroxide+Phosporous","type":"Herbicide","adj":"Halo 90","rate":"1-4 pt per 100 gal","gt":["Kocide 4.5 LF"],"src":"guide"},{"tn":"SePro Sonar AS","ai":"Fluridone","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Secure","ai":"Fluazinam","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Secure"],"src":"guide"},{"tn":"Secure Action","ai":"EOP","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Secure"],"src":"guide"},{"tn":"Sedgehammer Turf Herb","ai":"Halosulfuron-Methyl","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Sedgehammer","Prosedge"],"src":"guide"},{"tn":"Segment II","ai":"Sethoxydim","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Segment"],"src":"guide"},{"tn":"Segovis","ai":"oxathiapiprolin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Segway Fungicide SC","ai":"cyazofamid","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Segway"],"src":"guide"},{"tn":"Serata","ai":"Picarbutrazox","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Sevin XLR Plus Carbaryl","ai":"Carbaryl","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Sevin"],"src":"guide"},{"tn":"Shepherd Fungicide QC","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"Shepherd w/Wedgecheks","ai":"Propiconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Banner Maxx II"],"src":"guide"},{"tn":"Shortstop 2SC","ai":"Growth Regulator","type":"PGR","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Shuttle O Miticide","ai":"Mites","type":"Insecticide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Shuttle"],"src":"guide"},{"tn":"Solitare WSL","ai":"Sulfentrazone+Quinclorac","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Solitare"],"src":"guide"},{"tn":"Sonar Genesis","ai":"Fluridone","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Sonar RTU","ai":"Fluridone","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Specticle Flo","ai":"indaziflam","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Specticle","Specticle Flo"],"src":"guide"},{"tn":"SpeedZone Lawn & Weed Killer","ai":"Carfentrazone+24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Speedzone"],"src":"guide"},{"tn":"SpeedZone Southern EW","ai":"Carfentrazone+24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Speedzone"],"src":"guide"},{"tn":"Speedzone EW","ai":"Carfentrazone+24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Speedzone"],"src":"guide"},{"tn":"Speedzone Southern EW","ai":"Carfentrazone+24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Speedzone"],"src":"guide"},{"tn":"Stature SC","ai":"dimethomorph","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Subdue MAXX","ai":"Mefenoxam","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Subdue Maxx"],"src":"guide"},{"tn":"Subdue MAXX LinkPak","ai":"Mefenoxam","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Subdue Maxx"],"src":"guide"},{"tn":"Sultan Miticide","ai":"Cyflumetofen","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Super Trimec Broadleaf","ai":"24D Ester+24D acid+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Suppress EC","ai":"Non-Selective","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Sure Power","ai":"24D+Triclopyr+Fluroxypyr+Flumioxazin","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Chaser"],"src":"guide"},{"tn":"Sureguard SC","ai":"Flumioxazin","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Surge","ai":"Sulfentrazone+24D+MCPA+Dicamba","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Surge"],"src":"guide"},{"tn":"Surmise SpeedPro XT","ai":"Glufosinate+Ammonium nonanoate+Imazethapyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Finale"],"src":"guide"},{"tn":"T-Methyl 4.5F SPC","ai":"thiophanate methyl","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["3336","QP-TM","T-methyl SPC"],"src":"guide"},{"tn":"T-Zone SE","ai":"Triclopry+Sulfentrazone+24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"T-Zone SE Broadleaf","ai":"Triclopry+Sulfentrazone+24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"TREE-age R10","ai":"Emamectin benzoate","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Talstar Professional","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Talstar S Select","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Tame 2.4EC Spray Insect","ai":"Fenpropathrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Target 6 Plus MSMA","ai":"Metsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Manor"],"src":"guide"},{"tn":"Tartan Stressgard","ai":"iprodione + trifluoxystrobin","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Tartan","Armada"],"src":"guide"},{"tn":"Tekken","ai":"Isofetamis  + Tebuconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Telar XP","ai":"Chlorsulfuron","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Corsair"],"src":"guide"},{"tn":"Tenacity","ai":"Mesotrione","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Tenacity"],"src":"guide"},{"tn":"Terraguard SC","ai":"Triflumizole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Terrazole L CA ONLY","ai":"Etridiazole","type":"Fungicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Terrazole"],"src":"guide"},{"tn":"Teton Aquatic Algaecide/Herbicide","ai":"Mono salt of endothall","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Tetrino","ai":"Tetraniliprole","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Tide Triadimefon 43 SC","ai":"Triadmefon","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Tordon RTU","ai":"24D+Picloram","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Torque","ai":"Tebuconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Tower","ai":"Dimethenamid","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Traction","ai":"Fluaznam+Tebuconazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Transline Specialty","ai":"Clopyralid","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Lontrel"],"src":"guide"},{"tn":"TriStar 8.5SL","ai":"Acetamiprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"TriTek Spray Oil Emulsion","ai":"Oil","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Triact 70","ai":"neem","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Triad 3-Way","ai":"24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Triad Select","ai":"24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Triad T Select","ai":"2,4-D+MCPA+Triclopyr+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Cool Power"],"src":"guide"},{"tn":"Triathlon BA","ai":"ammonium chlorides","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Tribune","ai":"Diquat","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Reward","Tribune"],"src":"guide"},{"tn":"Tribute Total","ai":"Halosulfuron-Methyl+Formasulfuron","type":"Herbicide","adj":"Conic","rate":"1-2 pt per 100 gal","gt":["Tribute Total"],"src":"guide"},{"tn":"Triclopyr 3A","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Trimec 1000","ai":"24D Ester+24D acid+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Trimec 992","ai":"24D+MCPP+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Trimec Classic"],"src":"guide"},{"tn":"Trimec 992  Broadleaf","ai":"24D+MCPP+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Trimec Classic"],"src":"guide"},{"tn":"Trimec 992 Broadleaf","ai":"24D+MCPP+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Trimec Classic"],"src":"guide"},{"tn":"Trimec Bentgrss Broadlf","ai":"24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Trimec Classic","ai":"24D+MCPP+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Trimec Classic"],"src":"guide"},{"tn":"Trimec Classic Broadleaf","ai":"24D+MCPP+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Trimec Classic"],"src":"guide"},{"tn":"Trimec Encore","ai":"MCPA+Dicamba+MCPP","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Trimec Southern","ai":"24D+MCPA+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Trinity TR","ai":"Triticonazole","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Triton","Trinity"],"src":"guide"},{"tn":"Triple Crown Golf","ai":"Bifenthrin+Cypermethrin+Imidicloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Triple Crown T&O","ai":"Bifenthrin+Cypermethrin+Imidicloprid","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Triplet Low Odor","ai":"24D+MCPP+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Trimec Classic"],"src":"guide"},{"tn":"Triumph 22K","ai":"Picloram","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Turfcide 400","ai":"PCNB","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Turfcide 400"],"src":"guide"},{"tn":"Turflon Ester","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Turflon Ester Ultra","ai":"Triclopyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Turflon Ester Ultra"],"src":"guide"},{"tn":"UP-Star Gold Bifen","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"UP-Star SC Bifen","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Ultra Pure Oil","ai":"oil","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Vastlan","ai":"Triclopyr","type":"Herbicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Garlon"],"src":"guide"},{"tn":"Velifer Fungal Contact Insecticide/Miticide","ai":"Beauveria Bassiana","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Velista","ai":"Penthiopyrad","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Venerate CG","ai":"Burkholderia spp.","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Veteran 720","ai":"24D+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["2,4-D"],"src":"guide"},{"tn":"Vista XRT","ai":"Fluoxypyr","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Weed Whacker Jet Spray","ai":"24D+MCPP+Dicamba","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Trimec Classic"],"src":"guide"},{"tn":"Weed Zap","ai":"Non-Selective","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Weedar 64","ai":"Broadleaf","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Weedmaster","ai":"Broadleaf","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Weedone LV6 EC","ai":"Broadleaf","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Whippet","ai":"Disease","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Wisdom TC Flowable","ai":"Bifenthrin","type":"Insecticide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Talstar","Bisect","Upstar"],"src":"guide"},{"tn":"Xonerate 2SC","ai":"Amicarbazon","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"Xzemplar","ai":"Fluxapryoxad","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"ZZ Mecomec 4","ai":"MCPP","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":null,"src":"default"},{"tn":"ZZ. Lifeline","ai":"Glufosinate","type":"Herbicide","adj":"The Works","rate":"0.5-4 pt per 100 gal","gt":["Finale"],"src":"guide"},{"tn":"ZZ. Regalia CG","ai":"Reynoutria sachalinensis","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Zelto","ai":"Burkholderia spp.","type":"Nematicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"ZeroTol 2.0","ai":"Hydrogen Peroxide","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"ZeroTol 2.0 Greenhouse","ai":"Hydrogen Peroxide","type":"Fungicide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":null,"src":"default"},{"tn":"Zylam","ai":"Dinotefuran","type":"Insecticide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Safari"],"src":"guide"},{"tn":"Zylam Liquid Systemic","ai":"Dinotefuran","type":"Insecticide","adj":"Helix","rate":"1-2 pt per 100 gal","gt":["Safari"],"src":"guide"}];
+const TOTAL_PRODUCTS = PRODUCTS.length;
+document.getElementById('prodCount').textContent = TOTAL_PRODUCTS;
+
+// ============================================================
+// ADJUVANT RATIONALES — the "why" for each
+// ============================================================
+// Map adjuvant name + product class + active to a contextual reason.
+// We layer: specific overrides → adjuvant-by-type defaults → adjuvant generic.
+const ADJUVANT_INFO = {
+  'Helix': {
+    tagline: 'Penetrant + surfactant',
+    fungicide: 'Helix combines a non-ionic surfactant with a penetrant to drive systemic and contact fungicides into the leaf and thatch where the pathogen lives.',
+    insecticide: 'Helix moves contact and systemic insecticides past the leaf cuticle and into thatch, improving uptake on tough-to-wet pests like mites and grubs.',
+    herbicide: 'Helix improves leaf penetration of selective and sulfonylurea herbicides, especially on waxy or stressed weeds where coverage alone is not enough.',
+    pgr: 'Helix improves uniform leaf penetration of plant growth regulators, leading to more consistent suppression across the canopy.',
+    miticide: 'Helix helps miticides penetrate the leaf cuticle and reach mites sheltered on the underside, where pure contact products struggle.',
+    algaecide: 'Helix improves wetting and penetration so the active makes contact with surface algae and biofilm rather than beading off.',
+    generic: 'Helix is a balanced penetrant + surfactant package — Turf Fuel\'s most versatile spray adjuvant.'
+  },
+  'The Works': {
+    tagline: 'Drift + deposition + uptake',
+    fungicide: 'The Works pairs a deposition aid with a surfactant package — ideal for high-volume fungicide applications like Mancozeb where canopy coverage and drift control both matter.',
+    insecticide: 'The Works locks insecticide droplets onto the target with a deposition aid and reduces drift, critical for contact pyrethroids and neonics applied at low water volumes.',
+    herbicide: 'The Works gives post-emergent herbicides the deposition + uptake combination they need: better droplet retention on weeds and faster cuticular penetration.',
+    pgr: 'The Works improves PGR deposition and retention on the leaf surface, helping the active stay where it lands.',
+    generic: 'The Works is Turf Fuel\'s all-in-one drift, deposition, and uptake adjuvant — the workhorse for high-volume and contact sprays.'
+  },
+  'Conic': {
+    tagline: 'Crop oil concentrate',
+    herbicide: 'Conic is a methylated seed oil-style crop oil concentrate that dissolves the leaf waxes on grass and broadleaf weeds, dramatically improving uptake of sulfonylurea, ALS, and post-emergent herbicides.',
+    generic: 'Conic is a crop oil concentrate that softens the leaf cuticle for better uptake — required on most grass-active and sulfonylurea herbicides.'
+  },
+  'Halo 90': {
+    tagline: '90% non-ionic surfactant',
+    fungicide: 'Halo 90 is a high-load non-ionic surfactant — used with broad-coverage fungicides like Mancozeb and Copper where wetting the canopy uniformly is the priority.',
+    insecticide: 'Halo 90 is a high-strength surfactant that improves canopy wetting for contact insecticides like Spinosad and Deltamethrin.',
+    generic: 'Halo 90 is a 90% non-ionic surfactant — chosen when pure wetting and spreading is what the application needs.'
+  },
+  'Tank pHix': {
+    tagline: 'Tank acidifier + buffer',
+    fungicide: 'Tank pHix lowers and buffers spray water pH — important for sensitive fungicides like Mancozeb (Junction) that hydrolyze rapidly in alkaline tanks.',
+    herbicide: 'Tank pHix acidifies and buffers the tank water — Glyphosate is dramatically more effective at pH 4–6, and hard-water cations are neutralized so the active stays available.',
+    generic: 'Tank pHix is a water conditioner that drops spray-tank pH into the optimal 4–6 range and ties up calcium, magnesium, and bicarbonates that would otherwise antagonize the active.'
+  }
+};
+
+function rationaleFor(product) {
+  const info = ADJUVANT_INFO[product.adj] || ADJUVANT_INFO['Helix'];
+  const typeKey = (product.type || '').toLowerCase();
+  return info[typeKey] || info.generic;
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+const searchInput = document.getElementById('search');
+const resultsEl = document.getElementById('results');
+const clearBtn = document.getElementById('clearBtn');
+const outputEl = document.getElementById('output');
+const phInput = document.getElementById('phInput');
+const volInput = document.getElementById('volInput');
+const searchHint = document.getElementById('searchHint');
+const suggestChips = document.getElementById('suggestChips');
+
+let selectedProduct = null;
+
+// Build lowercase indices for fast search
+PRODUCTS.forEach(p => {
+  p._tnLow = p.tn.toLowerCase();
+  p._aiLow = p.ai.toLowerCase();
+});
+
+function highlight(text, query) {
+  if (!query) return text;
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return text;
+  return text.slice(0, idx) + '<em>' + text.slice(idx, idx + query.length) + '</em>' + text.slice(idx + query.length);
+}
+
+function searchProducts(q) {
+  q = q.trim().toLowerCase();
+  if (!q) return [];
+  const exactTrade = [];
+  const startsTrade = [];
+  const containsTrade = [];
+  const exactAI = [];
+  const startsAI = [];
+  const containsAI = [];
+  for (const p of PRODUCTS) {
+    const tn = p._tnLow, ai = p._aiLow;
+    if (tn === q) exactTrade.push(p);
+    else if (tn.startsWith(q)) startsTrade.push(p);
+    else if (tn.includes(q)) containsTrade.push(p);
+    else if (ai === q) exactAI.push(p);
+    else if (ai.startsWith(q)) startsAI.push(p);
+    else if (ai.includes(q)) containsAI.push(p);
+  }
+  return [...exactTrade, ...startsTrade, ...containsTrade, ...exactAI, ...startsAI, ...containsAI].slice(0, 40);
+}
+
+function renderResults(matches, query) {
+  if (!query) {
+    resultsEl.style.display = 'none';
+    return;
+  }
+  if (matches.length === 0) {
+    resultsEl.innerHTML = '<div class="no-results">No matching liquid products. Try a different trade name or active ingredient.</div>';
+    resultsEl.style.display = 'block';
+    return;
+  }
+  resultsEl.innerHTML = matches.map((p, idx) => {
+    return `<button class="result-item" data-idx="${PRODUCTS.indexOf(p)}">
+      <div class="result-info">
+        <div class="result-name">${highlight(p.tn, query)}</div>
+        <div class="result-ai">${highlight(p.ai, query)}</div>
+      </div>
+      <span class="result-type type-${p.type}">${p.type}</span>
+    </button>`;
+  }).join('');
+  resultsEl.style.display = 'block';
+}
+
+// Find alternatives — same active ingredient, different trade name
+function findAlternatives(product) {
+  const aiKey = product.ai.toLowerCase().trim();
+  return PRODUCTS.filter(p => p !== product && p.ai.toLowerCase().trim() === aiKey);
+}
+
+// ============================================================
+// RECOMMENDATION RENDERING
+// ============================================================
+function renderRecommendation() {
+  if (!selectedProduct) {
+    outputEl.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6l-4 6c-1 2 0 4 2 4h10c2 0 3-2 2-4l-4-6V3"/><path d="M9 3h6"/><path d="M10 13h4"/></svg>
+      </div>
+      <div class="empty-state-title">Ready to spray smart</div>
+      <div class="empty-state-text">Search for a chemical above and we'll match the right Turf Fuel adjuvant for the tank.</div>
+    </div>`;
+    return;
+  }
+  const p = selectedProduct;
+  const phVal = parseFloat(phInput.value);
+  const volVal = parseFloat(volInput.value);
+  const hasPh = !isNaN(phVal) && phVal > 0;
+  const hasVol = !isNaN(volVal) && volVal > 0;
+  const phIsAlkaline = hasPh && phVal > 7;
+  
+  // Decide the primary adjuvant: if the guide already calls for Tank pHix, that wins;
+  // otherwise honor the guide adjuvant and add a SEPARATE acidifier recommendation if pH > 7.
+  const guideAdjuvant = p.adj;
+  const guideRate = p.rate;
+  const adjInfo = ADJUVANT_INFO[guideAdjuvant] || ADJUVANT_INFO['Helix'];
+  
+  // Compute volume in oz/pt/gal for a sample sprayer volume
+  // Most rates are pt/100 gal. Convert: ratePtPer100Gal × volume_gal / 100 = pints needed.
+  // 1 pt = 16 fl oz.
+  function computeRateForVolume(rateStr, gallons) {
+    if (!gallons || gallons <= 0) return null;
+    // Parse e.g. "1-2 pt per 100 gal" or "4-8 fl oz per 100 gal" or "0.5-4 pt per 100 gal" or "1 quart per 100 gal"
+    const m = rateStr.match(/([\d.]+)(?:\s*-\s*([\d.]+))?\s*(pt|pint|fl\s*oz|oz|quart|qt|gal)\s*per\s*([\d.]+)\s*gal/i);
+    if (!m) return null;
+    let lo = parseFloat(m[1]);
+    let hi = m[2] ? parseFloat(m[2]) : lo;
+    const unit = m[3].toLowerCase().replace(/\s+/g, '');
+    const per = parseFloat(m[4]);
+    // Convert to fluid ounces
+    const ozPer = {
+      'pt': 16, 'pint': 16,
+      'floz': 1, 'oz': 1,
+      'quart': 32, 'qt': 32,
+      'gal': 128
+    }[unit] || 16;
+    const loOz = (lo * ozPer * gallons) / per;
+    const hiOz = (hi * ozPer * gallons) / per;
+    return { loOz, hiOz, unit, lo, hi };
+  }
+  
+  function formatOz(oz) {
+    if (oz < 1) return oz.toFixed(2) + ' fl oz';
+    if (oz < 16) return oz.toFixed(1).replace(/\.0$/, '') + ' fl oz';
+    // Show as pints if >= 16
+    const pints = oz / 16;
+    if (pints < 8) return pints.toFixed(2).replace(/\.?0+$/, '') + ' pt';
+    return (oz / 128).toFixed(2).replace(/\.?0+$/, '') + ' gal';
+  }
+  
+  const calcMain = hasVol ? computeRateForVolume(guideRate, volVal) : null;
+  
+  // Build HTML
+  let html = '<div class="recommendation">';
+  
+  // Product header
+  html += `<div class="product-header">
+    <div class="product-name">${escapeHtml(p.tn)}</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+      <div>
+        <span class="product-ai-label">Active Ingredient</span>
+        <span class="product-ai-value">${escapeHtml(p.ai)}</span>
+      </div>
+      <span class="product-type-tag type-${p.type}">${p.type}</span>
+    </div>
+  </div>`;
+  
+  // Primary recommendation
+  html += `<div class="adjuvant-card">
+    <div class="adjuvant-card-header">
+      <div class="adjuvant-card-eyebrow">✓ Recommended Adjuvant</div>
+    </div>
+    <div class="adjuvant-name">
+      <span class="turf-fuel-prefix">Turf Fuel</span>
+      ${escapeHtml(guideAdjuvant)}
+    </div>
+    <div style="font-size:12.5px;color:var(--ink-soft);font-weight:500;">${adjInfo.tagline}</div>
+    <div class="adjuvant-rate-row">
+      <span class="adjuvant-rate-label">Use rate</span>
+      <span class="adjuvant-rate">${escapeHtml(guideRate)}</span>
+    </div>
+    ${calcMain ? `
+      <div class="volume-callout">
+        <div class="volume-callout-label">For ${volVal} gal tank</div>
+        <div class="volume-callout-value">${
+          calcMain.lo === calcMain.hi 
+            ? formatOz(calcMain.loOz)
+            : `${formatOz(calcMain.loOz)}<span class="lo"> – </span>${formatOz(calcMain.hiOz)}`
+        }</div>
+        <div class="volume-callout-sub">Add ${guideAdjuvant} to the spray tank</div>
+      </div>
+    ` : ''}
+    <div class="adjuvant-reason">${rationaleFor(p)}</div>
+  </div>`;
+  
+  // pH warning + acidifier recommendation
+  if (phIsAlkaline) {
+    const isAlreadyAcidifier = guideAdjuvant === 'Tank pHix';
+    if (!isAlreadyAcidifier) {
+      // Recommend an acidifier IN ADDITION
+      // Per the spec: pH > 7 needs Tank pHix or The Works. We'll recommend Tank pHix
+      // unless the primary is already The Works, in which case The Works handles it.
+      const acidifier = guideAdjuvant === 'The Works' ? null : 'Tank pHix';
+      const acidifierRate = '4-8 fl oz per 100 gal';
+      
+      html += `<div class="ph-warning">
+        <div class="ph-warning-icon">!</div>
+        <div class="ph-warning-text">
+          <div class="ph-warning-title">Tank pH ${phVal.toFixed(1)} — acidifier needed</div>
+          <div class="ph-warning-detail">Spray water above pH 7 can hydrolyze sensitive actives and bind hard-water cations.
+          ${acidifier 
+            ? ` Add <strong>Turf Fuel ${acidifier}</strong> (${acidifierRate}) to drop tank pH to 4–6.`
+            : ` Your selected adjuvant <strong>The Works</strong> already includes a buffering package — pH should be addressed automatically.`}</div>
+        </div>
+      </div>`;
+      
+      if (acidifier && hasVol) {
+        const calcAcid = computeRateForVolume(acidifierRate, volVal);
+        if (calcAcid) {
+          html += `<div style="padding:0 16px 14px;background:var(--warn-bg);">
+            <div class="volume-callout" style="border-color:var(--warn-border);margin-top:0;">
+              <div class="volume-callout-label" style="color:var(--warn-border);">+ Tank pHix for ${volVal} gal tank</div>
+              <div class="volume-callout-value">${
+                calcAcid.lo === calcAcid.hi 
+                  ? formatOz(calcAcid.loOz)
+                  : `${formatOz(calcAcid.loOz)}<span class="lo"> – </span>${formatOz(calcAcid.hiOz)}`
+              }</div>
+              <div class="volume-callout-sub">Add separately to acidify the tank water</div>
+            </div>
+          </div>`;
+        }
+      }
+    } else {
+      // Already an acidifier
+      html += `<div class="ph-warning" style="background:var(--ok-bg);border-color:#c8e0b0;">
+        <div class="ph-warning-icon" style="background:var(--brand-green);">✓</div>
+        <div class="ph-warning-text">
+          <div class="ph-warning-title" style="color:var(--brand-green-dark);">pH ${phVal.toFixed(1)} — acidifier is built in</div>
+          <div class="ph-warning-detail">The recommended Tank pHix handles your high spray-water pH directly.</div>
+        </div>
+      </div>`;
+    }
+  }
+  
+  // Alternatives
+  const alts = findAlternatives(p);
+  html += `<div class="alternatives">
+    <div class="alternatives-header">
+      <span>Alternative products · same AI</span>
+      <span class="alt-count">${alts.length}</span>
+    </div>`;
+  if (alts.length === 0) {
+    html += '<div class="no-alts">No other liquid products in catalog share this active ingredient.</div>';
+  } else {
+    html += '<div class="alt-list">' + alts.slice(0, 12).map(alt => 
+      `<button class="alt-item" data-idx="${PRODUCTS.indexOf(alt)}">
+        <span class="alt-item-name">${escapeHtml(alt.tn)}</span>
+        <svg class="alt-item-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>`
+    ).join('') + '</div>';
+    if (alts.length > 12) {
+      html += `<div style="font-size:11.5px;color:var(--ink-muted);margin-top:8px;text-align:center;">+ ${alts.length - 12} more not shown</div>`;
+    }
+  }
+  html += '</div>';
+  
+  html += '</div>'; // close .recommendation
+  outputEl.innerHTML = html;
+  
+  // Wire up alt clicks
+  outputEl.querySelectorAll('.alt-item').forEach(b => {
+    b.addEventListener('click', () => {
+      const idx = parseInt(b.dataset.idx, 10);
+      selectProduct(PRODUCTS[idx]);
+      // Scroll up so user sees the new product
+      outputEl.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+function selectProduct(p) {
+  selectedProduct = p;
+  searchInput.value = p.tn;
+  clearBtn.classList.add('visible');
+  resultsEl.style.display = 'none';
+  suggestChips.style.display = 'none';
+  renderRecommendation();
+}
+
+searchInput.addEventListener('input', e => {
+  const q = e.target.value.trim();
+  if (q) {
+    clearBtn.classList.add('visible');
+    searchHint.style.display = 'none';
+    suggestChips.style.display = 'none';
+    renderResults(searchProducts(q), q);
+    // If user changes search away from selected, clear selection
+    if (selectedProduct && q.toLowerCase() !== selectedProduct.tn.toLowerCase()) {
+      selectedProduct = null;
+      renderRecommendation();
+    }
+  } else {
+    clearBtn.classList.remove('visible');
+    searchHint.style.display = 'block';
+    resultsEl.style.display = 'none';
+    selectedProduct = null;
+    renderRecommendation();
+  }
+});
+
+resultsEl.addEventListener('click', e => {
+  const btn = e.target.closest('.result-item');
+  if (!btn) return;
+  const idx = parseInt(btn.dataset.idx, 10);
+  selectProduct(PRODUCTS[idx]);
+});
+
+clearBtn.addEventListener('click', () => {
+  searchInput.value = '';
+  searchInput.focus();
+  clearBtn.classList.remove('visible');
+  resultsEl.style.display = 'none';
+  searchHint.style.display = 'block';
+  selectedProduct = null;
+  renderRecommendation();
+});
+
+[phInput, volInput].forEach(el => {
+  el.addEventListener('input', () => {
+    if (selectedProduct) renderRecommendation();
+  });
+});
+
+// Quick-suggest chips when search is focused but empty
+searchInput.addEventListener('focus', () => {
+  if (!searchInput.value.trim()) {
+    const examples = ['Roundup', 'Acelepryn', 'Tenacity', 'Glyphosate', 'Imidacloprid', 'Bifenthrin'];
+    suggestChips.innerHTML = examples.map(e => `<button class="chip" data-q="${e}">${e}</button>`).join('');
+    suggestChips.style.display = 'flex';
+    suggestChips.querySelectorAll('.chip').forEach(c => {
+      c.addEventListener('click', () => {
+        searchInput.value = c.dataset.q;
+        searchInput.dispatchEvent(new Event('input', {bubbles:true}));
+        searchInput.focus();
+      });
+    });
+  }
+});
+
+// Hide chips on blur after a small delay (so chip clicks register)
+searchInput.addEventListener('blur', () => {
+  setTimeout(() => suggestChips.style.display = 'none', 200);
+});
+</script>
+</body>
+</html>
